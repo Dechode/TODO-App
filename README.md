@@ -4,8 +4,8 @@ CLI program for managing tasks with TODOs.
 
 
 ## Dependancies
-
-Make sure you have installed jsonpickle
+First install python and add it to PATH.
+Then make sure you have installed jsonpickle
 
 ```bash
   pip install jsonpickle
