@@ -14,6 +14,22 @@ class TaskDescription(object):
         self.status = ''
         self.todos = []
 
+class App:
+    taskList = []
+    jsonName = 'tasks.json'
+    argCount = 0
+    
+    def __init__(self, workingDir):
+        self.workingDir = workingDir
+        self.jsonPath = self.workingDir + '/%s' % App.jsonName
+        self.taskCount = 0
+
+        if os.path.exists(self.workingDir + '/.git/'):
+            if not os.path.exists(self.workingDir + '/.gitignore'):
+                print('gitignore file not found, creating one.')
+                with open('.gitignore', 'w') as f:
+                    f.write(self.jsonName)
+                    f.close()
 if __name__ == '__main__':
     todo()
 
