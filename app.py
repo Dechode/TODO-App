@@ -31,6 +31,26 @@ class App:
                     f.write(self.jsonName)
                     f.close()
 
+    def printTODO(self, id):
+        count = 0
+        print('Task %d TODOS:' % id)
+        for todo in self.taskList[id].todos:
+            print('TODO %d. %s' % (count+1, todo))
+            count += 1
+
+    def printTask(self, id):
+        print('Task name = %s' % str(self.taskList[id].taskName))
+        print('Task start time = %s' % str(self.taskList[id].startTime))
+        print('Task stop time = %s' % str(self.taskList[id].stopTime))
+        print('Task status = %s' % str(self.taskList[id].status))
+        print('\n')
+        self.printTODO(id)
+
+    def printTaskList(self):
+        print('Total number of tasks: %d' % int(len(app.taskList)))
+        for i in range(self.taskCount):
+            self.printTask(i)
+
     def createTasksJSON(self):
         with open(App.jsonName, 'w') as f:
             tasks = jsonpickle.encode(self.taskList)
@@ -84,7 +104,86 @@ class App:
             tasks = jsonpickle.encode(self.taskList)
             f.write(str(tasks))
             f.close()
+
+    def getIdFromName(self, name):
+        count = 0
+        for task in self.taskList:
+            count += 1
+            if task.taskName == name:
+                return count - 1
+        return -1
+
+    # Valid args are: create/remove/status/add-todo/remove-todo/list <taskname> (<description>)
+    def parseCmdArgs(self):
+
+        App.argCount = len(sys.argv)
+        if App.argCount <= 1:
+            print('ERROR: No args given! Usage: app.py <taskname> <action> (<description>) ')
+            return
+        
+        action = sys.argv[1]
+
+        # Only action without having to specify task name
+        if action == 'list':
+            self.printTaskList()
+            return
+
+        if App.argCount <= 2:
+            print('Only 1 argument given and its not <list>')
+            return
+
+        taskname = sys.argv[2]
+        taskID = self.getIdFromName(taskname) # Will return -1 if not found
+
+        if action == 'create':
+            if taskID >= 0:
+                print('Task with that name already exists!')
+                return
+            taskID = self.addTask()
+            #self.taskList[taskID].status = 'Doing'
+                
+        elif action == 'remove':
+            if len(self.taskList) < 1:
+                print('No task to stop!')
+                return
+
+            if taskID >= 0 and taskID < self.taskCount:
+                del self.taskList[taskID]
+                self.taskCount -= 1
+                print('TaskID %d removed!' % taskID)
+
+        elif action == 'status':
+            if taskID < 0:
+                print('No task with that name!')
+            else:
+                self.printTask(taskID)
+
+        
+
+        elif action == 'add-todo':
+            if taskID >= 0:
+                description = sys.argv[3]
+                self.addTODO(taskID, description)
+
+        elif action == 'remove-todo':
+            pass
+
+        elif action == 'pause':
+            pass
+
+        elif action == 'continue':
+            pass
+
+        else:
+            print('Unknown action!')
+            return
+
+        #print("ID of current task = %d" % int(taskID))
+
 if __name__ == '__main__':
-    todo()
+    app = App(os.getcwd())
+    app.loadTasks()
+    app.parseCmdArgs()
+    app.saveTasks()
 
 
