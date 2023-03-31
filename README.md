@@ -3,7 +3,7 @@
 CLI program for managing tasks with TODOs. 
 
 
-## Dependancies
+## Dependencies
 First install python and add it to PATH.
 Then make sure you have installed jsonpickle
 
@@ -12,6 +12,12 @@ Then make sure you have installed jsonpickle
 ```
     
 ## Usage/Examples
+
+Clone the repository
+```bash
+git clone https://github.com/Dechode/TODO-App.gito
+cd TODO-App
+```
 
 Create a new task
 ```bash
