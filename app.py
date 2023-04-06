@@ -15,7 +15,7 @@ class TaskDescription(object):
         self.todos = []
 
 class App:
-    taskList = []
+    taskList = [TaskDescription]
     jsonName = 'tasks.json'
     argCount = 0
     
@@ -39,6 +39,7 @@ class App:
             count += 1
 
     def printTask(self, id):
+        print('\n')
         print('Task name = %s' % str(self.taskList[id].taskName))
         print('Task start time = %s' % str(self.taskList[id].startTime))
         print('Task stop time = %s' % str(self.taskList[id].stopTime))
@@ -47,7 +48,7 @@ class App:
         self.printTODO(id)
 
     def printTaskList(self):
-        print('Total number of tasks: %d' % int(len(app.taskList)))
+        print('Total number of tasks: %d' % len(self.taskList))
         for i in range(self.taskCount):
             self.printTask(i)
 
@@ -66,11 +67,6 @@ class App:
         print(todo)
 
     def removeTODO(self, taskID, todoID):
-        print('taskID = ' + str(taskID))
-        print('todoID = ' + str(taskID))
-        #taskID = int(taskID)
-        #todoID = int(todoID)
-
         if self.taskCount - 1 < taskID:
             print('task ID is too big, cant add TODO')
             return
@@ -81,8 +77,8 @@ class App:
             print('Invalid todo id')
             return
 
-        print(self.taskList[taskID].todos)
         self.taskList[taskID].todos.pop(int(todoID))
+        print('Removed TODO ID %d from task ID %d' % (int(todoID), int(taskID)))
 
     def addTask(self, task=None):
         if not task:
@@ -110,9 +106,16 @@ class App:
             print("No tasks.json found! Creating a new one.")
             self.createTasksJSON()
 
-        tasks = []        
+        tasks = [] 
         with open(App.jsonName, 'r') as f:
-            tasks = jsonpickle.decode(f.read())
+            file = jsonpickle.decode(f.read())
+            #count = 0
+            for task in file:
+                print('Loaded task is instace of TaskDescription = ' + str(isinstance(task, TaskDescription)))
+                if isinstance(task, TaskDescription):
+                    tasks.append(task)
+                    #count += 1
+                #self.taskList[count].replace(task)
 
         self.taskList = tasks
         self.taskCount = self.getTaskCount()
@@ -136,14 +139,13 @@ class App:
         return -1
 
     # Valid args are: create/remove/status/add-todo/remove-todo/list <taskname> (<description>)
-    def parseCmdArgs(self):
-
-        App.argCount = len(sys.argv)
+    def parseCmdArgs(self, args):
+        App.argCount = len(args)
         if App.argCount <= 1:
-            print('ERROR: No args given! Usage: app.py <taskname> <action> (<description>) ')
+            print('ERROR: No args given! Usage: app.py <action> <taskname> (<description>) ')
             return
         
-        action = sys.argv[1]
+        action = args[1]
 
         # Only action without having to specify task name
         if action == 'list':
@@ -154,7 +156,7 @@ class App:
             print('Only 1 argument given and its not <list>')
             return
 
-        taskname = sys.argv[2]
+        taskname = args[2]
         taskID = self.getIdFromName(taskname) # Will return -1 if not found
 
         if action == 'create':
@@ -165,15 +167,10 @@ class App:
                 
         elif action == 'remove':
             if len(self.taskList) < 1:
-                print('No task to stop!')
                 print('No task to remove!')
                 return
             self.removeTask(taskID)
 
-            if taskID >= 0 and taskID < self.taskCount:
-                del self.taskList[taskID]
-                self.taskCount -= 1
-                print('TaskID %d removed!' % taskID)
 
         elif action == 'status':
             if taskID < 0:
@@ -183,11 +180,11 @@ class App:
 
         elif action == 'add-todo':
             if taskID >= 0:
-                description = sys.argv[3]
+                description = args[3]
                 self.addTODO(taskID, description)
 
         elif action == 'remove-todo':
-            description = sys.argv[3]
+            description = args[3]
             self.removeTODO(taskID, description)
 
         elif action == 'pause':
@@ -204,7 +201,7 @@ class App:
 if __name__ == '__main__':
     app = App(os.getcwd())
     app.loadTasks()
-    app.parseCmdArgs()
+    app.parseCmdArgs(sys.argv)
     app.saveTasks()
 
 
