@@ -107,8 +107,6 @@ class App:
         tasks = []        
         with open(App.jsonName, 'r') as f:
             tasks = jsonpickle.decode(f.read())
-            #if len(tasks) <= 0:
-            #    print('Loaded Json is empty!')
 
         self.taskList = tasks
         self.taskCount = self.getTaskCount()
@@ -116,7 +114,6 @@ class App:
     def saveTasks(self):
         if len(self.taskList) <= 0:
             print('Nothing to save, task list is empty')
-            #os.remove(self.jsonPath)
             return
 
         with open(App.jsonName, 'w') as f:
@@ -159,7 +156,6 @@ class App:
                 print('Task with that name already exists!')
                 return
             taskID = self.addTask()
-            #self.taskList[taskID].status = 'Doing'
                 
         elif action == 'remove':
             if len(self.taskList) < 1:
@@ -177,8 +173,6 @@ class App:
             else:
                 self.printTask(taskID)
 
-        
-
         elif action == 'add-todo':
             if taskID >= 0:
                 description = sys.argv[3]
@@ -190,17 +184,14 @@ class App:
 
         elif action == 'pause':
             print('TODO: Pause tasks todo for time tracking')
-            pass
 
         elif action == 'continue':
             print('TODO: pause tasks todo for time tracking')
-            pass
 
         else:
             print('Unknown action!')
             return
 
-        #print("ID of current task = %d" % int(taskID))
 
 if __name__ == '__main__':
     app = App(os.getcwd())
