@@ -92,6 +92,12 @@ class App:
         print('Created Task ID = %d' % int(self.taskCount-1))
         return self.taskCount - 1
 
+    def removeTask(self, taskID):
+        if taskID >= 0 and taskID < self.taskCount:
+            del self.taskList[taskID]
+            self.taskCount -= 1
+            print('TaskID %d removed!' % taskID)
+
     def getTaskCount(self):
         count = 0
         for _ in self.taskList:
@@ -160,7 +166,9 @@ class App:
         elif action == 'remove':
             if len(self.taskList) < 1:
                 print('No task to stop!')
+                print('No task to remove!')
                 return
+            self.removeTask(taskID)
 
             if taskID >= 0 and taskID < self.taskCount:
                 del self.taskList[taskID]
