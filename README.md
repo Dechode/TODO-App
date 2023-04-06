@@ -15,7 +15,7 @@ Then make sure you have installed jsonpickle
 
 Clone the repository
 ```bash
-git clone https://github.com/Dechode/TODO-App.gito
+git clone https://github.com/Dechode/TODO-App.git
 cd TODO-App
 ```
 
