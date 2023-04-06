@@ -65,6 +65,25 @@ class App:
         print('Added a new TODO for task ID %d' % id)
         print(todo)
 
+    def removeTODO(self, taskID, todoID):
+        print('taskID = ' + str(taskID))
+        print('todoID = ' + str(taskID))
+        #taskID = int(taskID)
+        #todoID = int(todoID)
+
+        if self.taskCount - 1 < taskID:
+            print('task ID is too big, cant add TODO')
+            return
+        if taskID < 0:
+            print('task ID cant be below 0!')
+            return
+        if int(todoID) >= len(self.taskList[taskID].todos):
+            print('Invalid todo id')
+            return
+
+        print(self.taskList[taskID].todos)
+        self.taskList[taskID].todos.pop(int(todoID))
+
     def addTask(self, task=None):
         if not task:
             task = TaskDescription(sys.argv[2], os.getcwd(), time.time())
@@ -166,12 +185,15 @@ class App:
                 self.addTODO(taskID, description)
 
         elif action == 'remove-todo':
-            pass
+            description = sys.argv[3]
+            self.removeTODO(taskID, description)
 
         elif action == 'pause':
+            print('TODO: Pause tasks todo for time tracking')
             pass
 
         elif action == 'continue':
+            print('TODO: pause tasks todo for time tracking')
             pass
 
         else:
