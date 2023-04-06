@@ -34,6 +34,12 @@ Add TODO to a task
 python app.py add-todo <taskname> "String of what needs to be done"
 ```
 
+Remove TODO from a task
+```bash
+python app.py remove-todo <taskname> <todoID> 
+```
+
+
 List current tasks and their TODOs
 ```bash
 python app.py list
