@@ -4,7 +4,7 @@ import jsonpickle
 import app as TODOApp
 import time
 
-class TestApp(unittest.TestCase):
+class TestTODOApp(unittest.TestCase):
 
     def setUp(self):
         print('\nsetUp')
