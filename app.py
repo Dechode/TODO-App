@@ -109,13 +109,9 @@ class App:
         tasks = [] 
         with open(App.jsonName, 'r') as f:
             file = jsonpickle.decode(f.read())
-            #count = 0
             for task in file:
-                print('Loaded task is instace of TaskDescription = ' + str(isinstance(task, TaskDescription)))
                 if isinstance(task, TaskDescription):
                     tasks.append(task)
-                    #count += 1
-                #self.taskList[count].replace(task)
 
         self.taskList = tasks
         self.taskCount = self.getTaskCount()
