@@ -8,7 +8,7 @@ First install python and add it to PATH.
 Then make sure you have installed jsonpickle
 
 ```bash
-  pip install jsonpickle
+pip install jsonpickle
 ```
     
 ## Usage/Examples
@@ -44,7 +44,6 @@ List current tasks and their TODOs
 ```bash
 python app.py list
 ```
-
 
 
 ## Authors
