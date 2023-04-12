@@ -11,6 +11,10 @@ class TODODescription(object):
         self.startTime = startTime
         self.stopTime = -1
 
+    def display(self, id=''):
+        print('%s %s' % (str(id), str(self.todoName)))
+
+
 class TaskDescription(object):
     def __init__(self, name, path, startTime):
         self.taskPath = path 
@@ -26,6 +30,18 @@ class TaskDescription(object):
     def removeTODO(self, id):
         self.todos.pop(int(id))
 
+    def display(self):
+        print('\n')
+        print('Task name = %s' % str(self.taskName))
+        print('Task start time = %s' % str(self.startTime))
+        print('Task stop time = %s' % str(self.stopTime))
+        print('Task status = %s' % str(self.status))
+        print('\nTODO:s\n')
+        todoID = 0
+        for todo in self.todos:
+            todo.display(todoID)
+            todoID += 1
+
 class App:
     taskList = [TaskDescription]
     jsonName = 'tasks.json'
@@ -36,26 +52,10 @@ class App:
         self.jsonPath = self.workingDir + '/%s' % App.jsonName
         self.taskCount = 0
 
-    def printTODO(self, id):
-        count = 0
-        print('Task %d TODOS:\n' % id)
-        for todo in self.taskList[id].todos:
-            print('ID %d. %s' % (count, todo))
-            count += 1
-
-    def printTask(self, id):
-        print('\n')
-        print('Task name = %s' % str(self.taskList[id].taskName))
-        print('Task start time = %s' % str(self.taskList[id].startTime))
-        print('Task stop time = %s' % str(self.taskList[id].stopTime))
-        print('Task status = %s' % str(self.taskList[id].status))
-        print('\n')
-        self.printTODO(id)
-
     def printTaskList(self):
         print('Total number of tasks: %d' % len(self.taskList))
-        for i in range(self.taskCount):
-            self.printTask(i)
+        for task in self.taskList:
+            task.display()
 
     def createTasksJSON(self):
         with open(App.jsonName, 'w') as f:
@@ -63,13 +63,13 @@ class App:
             f.write(str(tasks))
             f.close() 
 
-    def addTODO(self, id, todo):
-        if self.taskCount - 1 < id:
+    def addTODO(self, taskID, todo):
+        if self.taskCount - 1 < taskID:
             print('ID is too big, cant add TODO')
             return
-        self.taskList[id].addTODO(todo)
+        self.taskList[taskID].addTODO(todo)
 
-        print('Added a new TODO for task ID %d' % id)
+        print('Added a new TODO for task ID %d' % taskID)
         print(todo)
 
     def removeTODO(self, taskID, todoID):
@@ -168,12 +168,11 @@ class App:
                 return
             self.removeTask(taskID)
 
-
         elif action == 'status':
             if taskID < 0:
                 print('No task with that name!')
             else:
-                self.printTask(taskID)
+                self.taskList[taskID].display()
 
         elif action == 'add-todo':
             if taskID >= 0:
