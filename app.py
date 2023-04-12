@@ -8,11 +8,11 @@ import jsonpickle
 class TaskDescription(object):
     def __init__(self, name, path, startTime):
         self.taskPath = path
-        self.taskName = name
+        self.taskName: str = name
         self.startTime = startTime
         self.stopTime = -1
         self.status = ''
-        self.todos = []
+        self.todos: list = [str]
 
 class App:
     taskList = [TaskDescription]
@@ -73,9 +73,7 @@ class App:
         self.taskList[taskID].todos.pop(int(todoID))
         print('Removed TODO ID %d from task ID %d' % (int(todoID), int(taskID)))
 
-    def addTask(self, task=None):
-        if not task:
-            task = TaskDescription(sys.argv[2], os.getcwd(), time.time())
+    def addTask(self, task: TaskDescription=TaskDescription('Empty task', os.getcwd(), time.time())):
         self.taskList.append(task)
         self.taskCount += 1
         print('Created Task ID = %d' % int(self.taskCount-1))
