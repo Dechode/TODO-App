@@ -5,14 +5,26 @@ import sys
 import time
 import jsonpickle
 
+class TODODescription(object):
+    def __init__(self, todoName, startTime = -1) -> None:
+        self.todoName = todoName
+        self.startTime = startTime
+        self.stopTime = -1
+
 class TaskDescription(object):
     def __init__(self, name, path, startTime):
-        self.taskPath = path
+        self.taskPath = path 
         self.taskName: str = name
         self.startTime = startTime
         self.stopTime = -1
         self.status = ''
-        self.todos: list = [str]
+        self.todos: list = []
+
+    def addTODO(self, todo: TODODescription):
+        self.todos.append(todo)
+
+    def removeTODO(self, id):
+        self.todos.pop(int(id))
 
 class App:
     taskList = [TaskDescription]
@@ -26,7 +38,7 @@ class App:
 
     def printTODO(self, id):
         count = 0
-        print('Task %d TODOS:' % id)
+        print('Task %d TODOS:\n' % id)
         for todo in self.taskList[id].todos:
             print('ID %d. %s' % (count, todo))
             count += 1
@@ -55,7 +67,8 @@ class App:
         if self.taskCount - 1 < id:
             print('ID is too big, cant add TODO')
             return
-        self.taskList[id].todos.append(todo)
+        self.taskList[id].addTODO(todo)
+
         print('Added a new TODO for task ID %d' % id)
         print(todo)
 
@@ -70,10 +83,11 @@ class App:
             print('Invalid todo id')
             return
 
-        self.taskList[taskID].todos.pop(int(todoID))
+        self.taskList[taskID].removeTODO(todoID)
         print('Removed TODO ID %d from task ID %d' % (int(todoID), int(taskID)))
 
-    def addTask(self, task: TaskDescription=TaskDescription('Empty task', os.getcwd(), time.time())):
+    def addTask(self, taskName: str):
+        task:TaskDescription = TaskDescription(taskName, os.getcwd(), time.time())
         self.taskList.append(task)
         self.taskCount += 1
         print('Created Task ID = %d' % int(self.taskCount-1))
@@ -108,10 +122,6 @@ class App:
         self.taskCount = self.getTaskCount()
 
     def saveTasks(self):
-        if len(self.taskList) <= 0:
-            print('Nothing to save, task list is empty')
-            return
-
         with open(App.jsonName, 'w') as f:
             tasks = jsonpickle.encode(self.taskList)
             f.write(str(tasks))
@@ -150,7 +160,7 @@ class App:
             if taskID >= 0:
                 print('Task with that name already exists!')
                 return
-            taskID = self.addTask()
+            taskID = self.addTask(taskname)
                 
         elif action == 'remove':
             if len(self.taskList) < 1:
@@ -168,7 +178,8 @@ class App:
         elif action == 'add-todo':
             if taskID >= 0:
                 description = args[3]
-                self.addTODO(taskID, description)
+                todo = TODODescription(description)
+                self.addTODO(taskID, todo)
 
         elif action == 'remove-todo':
             description = args[3]

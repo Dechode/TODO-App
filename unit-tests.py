@@ -27,15 +27,13 @@ class TestTODOApp(unittest.TestCase):
 
     def test_addTask(self):
         taskCount1 = len(self.app.taskList)
-        task = TODOApp.TaskDescription('TestingTask', os.getcwd(), time.time())
-        self.app.addTask(task)
+        self.app.addTask('TestTask')
         taskCount2= len(self.app.taskList)
         self.assertLess(taskCount1, taskCount2)
 
     def test_addNRemoveTask(self):
         taskCount1 = len(self.app.taskList)
-        task = TODOApp.TaskDescription('TestingTask', os.getcwd(), time.time())
-        self.app.addTask(task)
+        self.app.addTask('TestTask')
         taskCount2= len(self.app.taskList)
         self.assertLess(taskCount1, taskCount2)
 
@@ -45,8 +43,7 @@ class TestTODOApp(unittest.TestCase):
 
     def test_addTODO(self):
         if self.app.taskCount < 1:
-            task = TODOApp.TaskDescription('TestingTask', os.getcwd(), time.time())
-            self.app.addTask(task)
+            self.app.addTask('TestTask')
 
         todoCount1 = 0
         for task in self.app.taskList:
@@ -62,8 +59,7 @@ class TestTODOApp(unittest.TestCase):
 
     def test_addNRemoveTODO(self):
         if self.app.taskCount < 1:
-            task = TODOApp.TaskDescription('TestingTask', os.getcwd(), time.time())
-            self.app.addTask(task)
+            self.app.addTask('TestTask')
 
         todoCount1 = 0
         for task in self.app.taskList:
