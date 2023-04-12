@@ -24,13 +24,6 @@ class App:
         self.jsonPath = self.workingDir + '/%s' % App.jsonName
         self.taskCount = 0
 
-        if os.path.exists(self.workingDir + '/.git/'):
-            if not os.path.exists(self.workingDir + '/.gitignore'):
-                print('gitignore file not found, creating one.')
-                with open('.gitignore', 'w') as f:
-                    f.write(self.jsonName)
-                    f.close()
-
     def printTODO(self, id):
         count = 0
         print('Task %d TODOS:' % id)
