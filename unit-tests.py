@@ -21,6 +21,7 @@ class TestTODOApp(unittest.TestCase):
         print('tearDown')
         self.app.taskList.clear()
 
+
     def test_taskCount(self):
         self.assertEqual(self.app.taskCount, len(self.app.taskList))
 
